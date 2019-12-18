@@ -22,8 +22,6 @@ namespace WebCrawler.CR.Core
             // count pages to crawl that are internal to that domain
             // count pages to crawl that are external to that domain
 
-            //Console.WriteLine(colReturn);
-
         }
 
         private static void BeginCrawl(Uri builditBaseUrl)
