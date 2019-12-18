@@ -10,7 +10,7 @@ namespace WebCrawler.CR.Core
 {
     public abstract class Program
     {
-        static async Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
             Console.WriteLine("Start crawling");
 
@@ -24,7 +24,7 @@ namespace WebCrawler.CR.Core
 
         }
 
-        private static void BeginCrawl(Uri builditBaseUrl)
+        public static void BeginCrawl(Uri builditBaseUrl)
         {
             var sitemap = new HtmlDocument();
             var url = builditBaseUrl;

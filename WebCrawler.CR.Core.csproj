@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
-    <ApplicationIcon />
+    <ApplicationIcon>gitprofilepic_Nxw_3.ico</ApplicationIcon>
     <Win32Resource />
     <Authors>Christine Romano</Authors>
     <Company />
