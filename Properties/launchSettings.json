@@ -1,7 +1,9 @@
 {
   "profiles": {
     "WebCrawler.CR.Core": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "workingDirectory": "C:\\Projects\\WebCrawler.CR.Core",
+      "nativeDebugging": true
     },
     "Docker": {
       "commandName": "Docker"

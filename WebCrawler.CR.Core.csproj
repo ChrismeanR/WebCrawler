@@ -10,10 +10,29 @@
     <Authors>Christine Romano</Authors>
     <Company />
     <Product>WebCrawler on .NetCore</Product>
+    <Configurations>Debug;Release;x64</Configurations>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+    <StartupObject />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Class1.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Docker.DotNet" Version="3.125.2" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
   </ItemGroup>
 
 </Project>
