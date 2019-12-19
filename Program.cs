@@ -45,19 +45,42 @@ namespace WebCrawler.CR.Core
             var cssLinks = doc.DocumentNode.SelectNodes("//link[@rel]");
             var atagLinks = doc.DocumentNode.SelectNodes("//a[@href]");
 
+            // run these through the function and add them to the global list
             var pageColReturn = GetNodeAttributesByTag(atagLinks, "href", "a");
             var contentColReturn = GetNodeAttributesByTag(images, "src", "img");
             var cssColReturn = GetNodeAttributesByTag(cssLinks, "rel", "link");
 
+            #region TODO: if more time, group these better and use this as the data context
+            //var colReturn = from x in pageColReturn
+            //                from y in contentColReturn
+            //                from z in cssColReturn
+            //                select new
+            //                {
+            //                    page = x.Select(x => x.PageUri),
+            //                    image = y.Select(y => y.PageUri),
+            //                    css = z.Select(z => z.PageUri),
+            //                };
+            //Console.WriteLine(colReturn); 
+            #endregion
+
             var itemsList = gobjPageOutput;
-                            
+
             // format this as a return by combining the above
 
-            foreach(var item in itemsList)
+            foreach (var item in itemsList)
             {
-                foreach(var detail in item)
+                foreach (var detail in item)
                 {
-                    Console.WriteLine(detail.PageUri);
+                    // TODO: if more time, get this hierarchy correct with relative urls & page content. It appends to the end currently
+
+                    //if (detail.PageUri.Contains(gobjDomain))
+                    //{
+                    //    Console.WriteLine(detail.PageUri);
+                    //}
+                    //else
+                    //{
+                        Console.WriteLine(detail.PageUri);
+                    //}
                 }
             }
         }
@@ -74,18 +97,12 @@ namespace WebCrawler.CR.Core
                 {
                     if (attrHref != null && attrHref.Value.Contains(tagType))
                     {
-                        var title = (node.Attributes["title"] != null) ? node.Attributes["title"].Value : "";
-                        //Console.WriteLine(title + " " + attrHref.Value);
-                        display.Add(new DisplayModel { PageUri = attrHref.Value,  TagType = tagType, AttributeType = strAttribute, Node = node.NodeType.ToString()});
-                       // gobjPageOutput.Add(new DisplayModel { PageUri = attrHref.Value, TagType = tagType, AttributeType = strAttribute, Node = node.NodeType.ToString() });
-
+                        display.Add(new DisplayModel { PageUri = attrHref.Value, TagType = tagType, AttributeType = strAttribute, Node = node.NodeType.ToString() });
                     }
-
                 }
-                display.OrderBy(x => x.PageUri).ThenBy(y => y.AttributeType).ThenBy(z => z.TagType);
             }
 
-            gobjPageOutput.Add(display);
+            gobjPageOutput.Add(display.OrderBy(y => y.PageUri).ThenBy(x => x.AttributeType).ThenBy(x => x.TagType).ToList());
 
             return gobjPageOutput;
         }
