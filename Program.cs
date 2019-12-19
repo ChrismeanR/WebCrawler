@@ -11,10 +11,10 @@ namespace WebCrawler.CR.Core
 {
     public abstract class Program
     {
-        protected static string gobjDomain = "connectforhealthco.com";
-        protected static List<List<DisplayModel>> gobjPageOutput = new List<List<DisplayModel>>();
+        public static string gobjDomain = "connectforhealthco.com";
+        public static List<List<DisplayModel>> gobjPageOutput = new List<List<DisplayModel>>();
         //protected static ListOfDisplay<DisplayModel> gobjPageOutput = new ListOfDisplay<DisplayModel>();
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
             Console.WriteLine("Start crawling");
 
@@ -23,9 +23,7 @@ namespace WebCrawler.CR.Core
 
             // jump into method to search the site and do the heavy lifting
             BeginCrawl(builditBaseUrl);
-            // count pages to crawl that are internal to that domain
-            // count pages to crawl that are external to that domain
-
+            
         }
 
         public static void BeginCrawl(Uri builditBaseUrl)
@@ -34,9 +32,6 @@ namespace WebCrawler.CR.Core
             var url = builditBaseUrl;
             var web = new HtmlWeb();
             var doc = web.Load(url);
-            int indexValue = 0;
-
-            Dictionary<string, string> attrValue = new Dictionary<string, string>();
 
             // get all <link>
             var link = doc.DocumentNode.SelectNodes("//link[@href]");
@@ -85,7 +80,7 @@ namespace WebCrawler.CR.Core
             }
         }
 
-        private static List<List<DisplayModel>> GetNodeAttributesByTag(HtmlNodeCollection colHtmlNode, string strAttribute, string tagType)
+        public static List<List<DisplayModel>> GetNodeAttributesByTag(HtmlNodeCollection colHtmlNode, string strAttribute, string tagType)
         {
             List<DisplayModel> display = new List<DisplayModel>();
 
