@@ -19,6 +19,7 @@ namespace WebCrawler.CR.Core.Models
     {
         internal void Add(List<DisplayModel> display)
         {
+            // TOOD: create override method for this for adds to a list of lists
             throw new NotImplementedException();
         }
     }
