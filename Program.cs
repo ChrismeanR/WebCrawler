@@ -43,6 +43,7 @@ namespace WebCrawler.CR.Core
             // run these through the function and add them to the global list
             var pageColReturn = GetNodeAttributesByTag(atagLinks, "href", "a");
             var contentColReturn = GetNodeAttributesByTag(images, "src", "img");
+            var linkColReturn = GetNodeAttributesByTag(link, "href", "link");
             var cssColReturn = GetNodeAttributesByTag(cssLinks, "rel", "link");
 
             #region TODO: if more time, group these better and use this as the data context
