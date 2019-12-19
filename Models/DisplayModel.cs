@@ -14,4 +14,12 @@ namespace WebCrawler.CR.Core.Models
         public String AttributeType { get; set; }
         public String TagType { get; set; }
     }
+
+    public class ListOfDisplay<T> : List<DisplayModel>
+    {
+        internal void Add(List<DisplayModel> display)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

@@ -12,7 +12,8 @@ namespace WebCrawler.CR.Core
     public abstract class Program
     {
         protected static string gobjDomain = "connectforhealthco.com";
-        protected static List<DisplayModel> gobjPageOutput = new List<DisplayModel>();
+        protected static List<List<DisplayModel>> gobjPageOutput = new List<List<DisplayModel>>();
+        //protected static ListOfDisplay<DisplayModel> gobjPageOutput = new ListOfDisplay<DisplayModel>();
         public static async Task Main(string[] args)
         {
             Console.WriteLine("Start crawling");
@@ -48,16 +49,20 @@ namespace WebCrawler.CR.Core
             var contentColReturn = GetNodeAttributesByTag(images, "src", "img");
             var cssColReturn = GetNodeAttributesByTag(cssLinks, "rel", "link");
 
-            var itemsList = gobjPageOutput.OrderBy(x => x.PageUri).ThenBy(y => y.AttributeType);
+            var itemsList = gobjPageOutput;
+                            
             // format this as a return by combining the above
 
             foreach(var item in itemsList)
             {
-                Console.WriteLine(item.PageUri);
+                foreach(var detail in item)
+                {
+                    Console.WriteLine(detail.PageUri);
+                }
             }
         }
 
-        private static List<DisplayModel> GetNodeAttributesByTag(HtmlNodeCollection colHtmlNode, string strAttribute, string tagType)
+        private static List<List<DisplayModel>> GetNodeAttributesByTag(HtmlNodeCollection colHtmlNode, string strAttribute, string tagType)
         {
             List<DisplayModel> display = new List<DisplayModel>();
 
@@ -71,17 +76,16 @@ namespace WebCrawler.CR.Core
                     {
                         var title = (node.Attributes["title"] != null) ? node.Attributes["title"].Value : "";
                         //Console.WriteLine(title + " " + attrHref.Value);
-                        gobjPageOutput.Add(new DisplayModel { PageUri = attrHref.Value,  TagType = tagType, AttributeType = strAttribute, Node = node.NodeType.ToString()});
+                        display.Add(new DisplayModel { PageUri = attrHref.Value,  TagType = tagType, AttributeType = strAttribute, Node = node.NodeType.ToString()});
+                       // gobjPageOutput.Add(new DisplayModel { PageUri = attrHref.Value, TagType = tagType, AttributeType = strAttribute, Node = node.NodeType.ToString() });
 
-                        //attrValue.Add(node.Attributes["title"].Value ?? String.Empty, attr.Value);
-                        
                     }
-                    
+
                 }
-                //gobjPageOutput.Add(display);
+                display.OrderBy(x => x.PageUri).ThenBy(y => y.AttributeType).ThenBy(z => z.TagType);
             }
 
-            
+            gobjPageOutput.Add(display);
 
             return gobjPageOutput;
         }
