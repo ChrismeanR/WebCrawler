@@ -5,17 +5,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using WebCrawler.CR.Core.Models;
 
 namespace WebCrawler.CR.Core
 {
     public abstract class Program
     {
+        protected static string gobjDomain = "connectforhealthco.com";
+        protected static List<DisplayModel> gobjPageOutput = new List<DisplayModel>();
         public static async Task Main(string[] args)
         {
             Console.WriteLine("Start crawling");
 
             // get url of site to crawl
-            Uri builditBaseUrl = new Uri("https://connectforhealthco.com/");
+            Uri builditBaseUrl = new Uri("https://" + gobjDomain + "/");
 
             // jump into method to search the site and do the heavy lifting
             BeginCrawl(builditBaseUrl);
@@ -34,18 +37,53 @@ namespace WebCrawler.CR.Core
 
             Dictionary<string, string> attrValue = new Dictionary<string, string>();
 
-            System.Diagnostics.Debug.WriteLine(doc.DocumentNode.ChildNodes.ToHashSet());
-            foreach (HtmlNode node in doc.DocumentNode.SelectNodes("//a[@href]"))
+            // get all <link>
+            var link = doc.DocumentNode.SelectNodes("//link[@href]");
+            // get all <img> content 
+            var images = doc.DocumentNode.SelectNodes("//img[@src]");
+            var cssLinks = doc.DocumentNode.SelectNodes("//link[@rel]");
+            var atagLinks = doc.DocumentNode.SelectNodes("//a[@href]");
+
+            var pageColReturn = GetNodeAttributesByTag(atagLinks, "href", "a");
+            var contentColReturn = GetNodeAttributesByTag(images, "src", "img");
+            var cssColReturn = GetNodeAttributesByTag(cssLinks, "rel", "link");
+
+            var itemsList = gobjPageOutput.OrderBy(x => x.PageUri).ThenBy(y => y.AttributeType);
+            // format this as a return by combining the above
+
+            foreach(var item in itemsList)
             {
-                HtmlAttribute attr = node.Attributes["href"];
-                if (attr.Value.Contains("a"))
+                Console.WriteLine(item.PageUri);
+            }
+        }
+
+        private static List<DisplayModel> GetNodeAttributesByTag(HtmlNodeCollection colHtmlNode, string strAttribute, string tagType)
+        {
+            List<DisplayModel> display = new List<DisplayModel>();
+
+            foreach (HtmlNode node in colHtmlNode)
+            {
+                HtmlAttribute attrHref = node.Attributes[strAttribute];
+
+                if (attrHref != null)
                 {
-                    var title = (node.Attributes["title"] != null) ? node.Attributes["title"].Value : "";
-                    Console.WriteLine(title + " " + attr.Value);
-                    //attrValue.Add(node.Attributes["title"].Value, attr.Value);
+                    if (attrHref != null && attrHref.Value.Contains(tagType))
+                    {
+                        var title = (node.Attributes["title"] != null) ? node.Attributes["title"].Value : "";
+                        //Console.WriteLine(title + " " + attrHref.Value);
+                        gobjPageOutput.Add(new DisplayModel { PageUri = attrHref.Value,  TagType = tagType, AttributeType = strAttribute, Node = node.NodeType.ToString()});
+
+                        //attrValue.Add(node.Attributes["title"].Value ?? String.Empty, attr.Value);
+                        
+                    }
+                    
                 }
+                //gobjPageOutput.Add(display);
             }
 
+            
+
+            return gobjPageOutput;
         }
     }
 }
